@@ -1,37 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+interface LoginFormProps {
+  onLoginSuccess: (email: string, password: string) => void; // callback
+  onRegisterRedirect?: () => void;
+}
 
-export default function LoginForm() {
 
-    const router = useRouter();
-
+export default function LoginForm({ onLoginSuccess, onRegisterRedirect}: LoginFormProps) {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("")
 
 
-
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        const getPassword = localStorage.getItem("password");
-        const getEmail = localStorage.getItem("email");
-        if (email === getEmail && password === getPassword) {
-            router.push("/dashboard");
-        }
-        else {
-            alert("Invalid Credentials");
-        }
-
+    const handleLogin = () => {
+        onLoginSuccess(email, password);
     }
 
-
-    const handleRegisterRedirect = (e: React.MouseEvent) => {
-        e.preventDefault();
-        router.push("/registration");
-    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -76,7 +61,7 @@ export default function LoginForm() {
 
                 <p className="text-center text-sm text-gray-600 mt-4">
                     Don’t have an account?
-                    <a onClick={handleRegisterRedirect} className="text-blue-600 font-semibold ml-1">
+                    <a onClick={onRegisterRedirect} className="text-blue-600 font-semibold ml-1">
                         Register
                     </a>
                 </p>
